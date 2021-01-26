@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:todolist/src/models/todo.dart';
 import './src/screens/Login.dart';
 import './src/screens/Home.dart';
 import './src/screens/LoadingScreen.dart';
@@ -18,7 +20,8 @@ void main() {
         }
         // Proceed normally
         if (snapshot.connectionState == ConnectionState.done) {
-          return MyApp();
+          return ChangeNotifierProvider(
+              create: (context) => TodoListModel(), child: MyApp());
         }
 
         return LoadingScreen();
@@ -45,7 +48,9 @@ class MyApp extends StatelessWidget {
                   return Scaffold(body: Login());
                 },
                 '/': (BuildContext context) {
-                  return Home();
+                  return Scaffold(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      body: Home());
                 }
               });
         });

@@ -1,7 +1,7 @@
 export '../widgets/Todo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'Todo.dart';
+import '../widgets/Todo.dart';
 import 'package:provider/provider.dart';
 import '../models/todo.dart';
 import 'package:flutter/src/widgets/navigator.dart';
