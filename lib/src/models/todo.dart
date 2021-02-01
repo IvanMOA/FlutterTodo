@@ -41,7 +41,6 @@ class TodoListModel extends ChangeNotifier {
   }
 }
 
-@immutable
 class Todo {
   final String title;
   final String author;

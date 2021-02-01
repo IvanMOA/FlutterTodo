@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:todolist/src/models/auth.dart';
 import 'package:todolist/src/models/todo.dart';
 import './src/screens/Login.dart';
 import './src/screens/Home.dart';
@@ -20,8 +21,11 @@ void main() {
         }
         // Proceed normally
         if (snapshot.connectionState == ConnectionState.done) {
-          return ChangeNotifierProvider(
-              create: (context) => TodoListModel(), child: MyApp());
+          return MultiProvider(providers: [
+            ChangeNotifierProvider<TodoListModel>(
+                create: (context) => TodoListModel()),
+            ChangeNotifierProvider<Auth>(create: (context) => Auth()),
+          ], child: MyApp());
         }
 
         return LoadingScreen();
@@ -31,28 +35,33 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final Auth auth = Provider.of<Auth>(context);
     return StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
+        stream: auth.onAuthStateChanged,
         builder: (context, AsyncSnapshot<User> snapshot) {
-          var initialRoute = snapshot.hasData ? '/' : '/login';
           if (snapshot.connectionState == ConnectionState.waiting) {
             return LoadingScreen();
           }
-
           // Actual app
           return MaterialApp(
-              theme: ThemeData(primaryColor: Colors.deepPurple[800]),
-              initialRoute: initialRoute,
-              routes: {
-                '/login': (BuildContext context) {
-                  return Scaffold(body: Login());
-                },
-                '/': (BuildContext context) {
-                  return Scaffold(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      body: Home());
-                }
-              });
+            theme: ThemeData(primaryColor: Colors.deepPurple[800]),
+            initialRoute: snapshot.hasData ? '/' : '/login',
+            onGenerateRoute: (settings) {
+              if (snapshot.hasData) {
+                return MaterialPageRoute(
+                    builder: (context) => Scaffold(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        body: Home()));
+              }
+              if (!snapshot.hasData) {
+                return MaterialPageRoute(
+                    builder: (context) => Scaffold(body: Login()));
+              }
+              return MaterialPageRoute(
+                  builder: (context) =>
+                      Scaffold(body: Text('Route not found')));
+            },
+          );
         });
   }
 }

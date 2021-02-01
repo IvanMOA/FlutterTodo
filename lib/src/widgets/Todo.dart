@@ -47,15 +47,11 @@ class _TodoState extends State<TodoWidget> {
           ],
         )),
         Container(
-            decoration: BoxDecoration(
-                color: todo.completed ? Colors.green : Colors.red),
             padding: EdgeInsets.all(5),
             child: Consumer<TodoListModel>(builder: (context, todolist, child) {
-              return IconButton(
-                  onPressed: () {
-                    toggleCompleted(todolist);
-                  },
-                  icon: Icon(Icons.emoji_emotions));
+              return Checkbox(
+                  value: todo.completed,
+                  onChanged: (val) => toggleCompleted(todolist));
             }))
       ],
     );

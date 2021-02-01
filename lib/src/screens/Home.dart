@@ -1,15 +1,16 @@
 export '../widgets/Todo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:todolist/src/models/auth.dart';
 import '../widgets/Todo.dart';
 import 'package:provider/provider.dart';
 import '../models/todo.dart';
-import 'package:flutter/src/widgets/navigator.dart';
 
 class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    var todolist = context.watch<TodoListModel>();
+    final TodoListModel todolist = Provider.of<TodoListModel>(context);
+    final Auth auth = Provider.of<Auth>(context);
     var todoWidgets = todolist.todos.map((todo) => TodoWidget(Todo(
         todo.id, todo.title, todo.description, todo.author, todo.completed)));
 
@@ -18,6 +19,26 @@ class Home extends StatelessWidget {
         // Section to display some info
         Container(
           height: size.height / 4,
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(auth.welcomeMessage,
+                      textScaleFactor: 1.5,
+                      style: TextStyle(color: Colors.white)),
+                  IconButton(
+                      icon: Icon(Icons.logout),
+                      color: Colors.white,
+                      onPressed: () async {
+                        await auth.signOut();
+                        // Navigator.pushNamed(context, '/login');
+                      })
+                ],
+              )
+            ],
+          ),
         ),
         Expanded(
             child: Container(
@@ -37,24 +58,13 @@ class Home extends StatelessWidget {
                     textScaleFactor: 1.75,
                   ),
                   IconButton(
-                    icon: Icon(Icons.add),
-                    tooltip: "Add a todo",
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return Text("asdRutaPro");
-                      }));
-                    },
-                  )
+                      icon: Icon(Icons.add),
+                      tooltip: "Add a todo",
+                      onPressed: auth.signOut)
                 ],
               ),
               // Actual todo list
               ...todoWidgets
-              // Consumer<TodoListModel>(builder: (context, todolist, child) {
-              //   Todo atodo = todolist.getById(0);
-              //   return TodoWidget(Todo(atodo.id, atodo.title, atodo.description,
-              //       atodo.author, atodo.completed));
-              // }),
             ],
           ),
         ))
