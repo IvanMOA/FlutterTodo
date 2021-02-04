@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:todolist/src/models/auth.dart';
 import 'package:todolist/src/models/todo.dart';
@@ -44,7 +45,9 @@ class MyApp extends StatelessWidget {
           }
           // Actual app
           return MaterialApp(
-            theme: ThemeData(primaryColor: Colors.deepPurple[800]),
+            theme: ThemeData(
+                primaryColor: Colors.deepPurple[800],
+                textTheme: GoogleFonts.sourceCodeProTextTheme()),
             initialRoute: snapshot.hasData ? '/' : '/login',
             onGenerateRoute: (settings) {
               if (snapshot.hasData) {
@@ -54,8 +57,7 @@ class MyApp extends StatelessWidget {
                         body: Home()));
               }
               if (!snapshot.hasData) {
-                return MaterialPageRoute(
-                    builder: (context) => Scaffold(body: Login()));
+                return MaterialPageRoute(builder: (context) => Login());
               }
               return MaterialPageRoute(
                   builder: (context) =>

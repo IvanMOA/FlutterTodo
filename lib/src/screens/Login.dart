@@ -1,54 +1,68 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:todolist/src/helpers/ColorsTolary.dart';
 import 'package:todolist/src/helpers/validators.dart';
 import 'package:todolist/src/models/auth.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:todolist/src/screens/AuthModals/SignInModal.dart';
 
 class Login extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
-
-  String email;
-  void setEmail(String email) => this.email = email;
-  String password;
-  void setPassword(String password) => this.password = password;
-
   Widget build(BuildContext context) {
-    final Auth auth = Provider.of<Auth>(context);
-    return Container(
-        margin: EdgeInsets.only(right: 50, left: 50),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //  Email
-              TextFormField(
-                  decoration: InputDecoration(hintText: "Enter your email"),
-                  onSaved: setEmail,
-                  validator: EmailValidator.validate),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
-              ),
-              // Password
-              TextFormField(
-                  decoration: InputDecoration(hintText: "Enter your password"),
-                  onSaved: setPassword,
-                  validator: PasswordValidator.validate),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: RaisedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState.validate()) {
-                        _formKey.currentState.save();
-                        await auth.signInWithEmailAndPassword(
-                            this.email, this.password);
-                        // Navigator.pushNamed(context, '/');
-                      }
-                    },
-                    child: Text("Sign in")),
-              )
-            ],
+    return Scaffold(
+      body: Row(children: [
+        Expanded(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+                  RichText(
+                      text: TextSpan(children: [
+                    TextSpan(
+                        text: 'Tolar',
+                        style: GoogleFonts.sourceCodePro(
+                            color: ColorsTolary.TolaryBlack, fontSize: 50)),
+                    TextSpan(
+                        text: 'y',
+                        style: GoogleFonts.sourceCodePro(
+                            color: ColorsTolary.TolaryPink, fontSize: 50))
+                  ])),
+                  Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+                  Container(
+                      width: constraints.maxWidth * 0.8,
+                      child: Image.asset('lib/src/assets/logo.png')),
+                  Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+                  TextButton(
+                    onPressed: () =>
+                        SignInModal.showSignInModal(context, SignInModal()),
+                    style: TextButton.styleFrom(
+                        backgroundColor: ColorsTolary.TolaryBlack,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
+                    child: Text(
+                      'Sign in',
+                      style: TextStyle(color: ColorsTolary.TolaryGray),
+                      textScaleFactor: 1.5,
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+                  TextButton(
+                    onPressed: null,
+                    child: Text(
+                      'Sign up',
+                      style: TextStyle(color: ColorsTolary.TolaryBlack),
+                      textScaleFactor: 1.5,
+                    ),
+                  )
+                ],
+              );
+            },
           ),
-        ));
+        )
+      ]),
+    );
   }
 }
