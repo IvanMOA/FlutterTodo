@@ -1,5 +1,7 @@
+typedef String ValidatorFn(String value);
+
 abstract class Validator {
-  static validate(String value) {}
+  static ValidatorFn validate;
 }
 
 class EmailValidator implements Validator {
