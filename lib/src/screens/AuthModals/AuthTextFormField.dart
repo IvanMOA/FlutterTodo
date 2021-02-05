@@ -5,9 +5,17 @@ import 'package:todolist/src/helpers/validators.dart';
 class AuthTextFormField extends StatelessWidget {
   TextEditingController controller;
   ValidatorFn validator;
-  AuthTextFormField({TextEditingController controller, ValidatorFn validator}) {
+  String label;
+  String hintText;
+  AuthTextFormField(
+      {TextEditingController controller,
+      ValidatorFn validator,
+      String label,
+      String hintText}) {
     this.controller = controller;
     this.validator = validator;
+    this.label = label;
+    this.hintText = hintText;
   }
   @override
   Widget build(BuildContext context) {
@@ -18,8 +26,8 @@ class AuthTextFormField extends StatelessWidget {
           focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: ColorsTolary.TolaryGreen)),
           labelStyle: TextStyle(color: ColorsTolary.TolaryBlack),
-          hintText: 'Enter your email',
-          labelText: 'Email'),
+          hintText: hintText,
+          labelText: label),
       validator: validator,
     );
   }
