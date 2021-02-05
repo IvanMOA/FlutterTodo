@@ -3,6 +3,10 @@ import 'package:flutter/cupertino.dart';
 
 class Auth extends ChangeNotifier {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final signinFormKey = GlobalKey<FormState>();
+  final signupFormKey = GlobalKey<FormState>();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
   bool logginIn;
   bool registering;
   bool loginError;
