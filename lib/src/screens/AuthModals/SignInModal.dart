@@ -9,7 +9,16 @@ import 'package:todolist/src/screens/AuthModals/AuthTextFormField.dart';
 
 class SignInModal extends StatelessWidget {
   static void showSignInModal(BuildContext context, Widget widget) {
-    Scaffold.of(context).showBottomSheet((context) => widget);
+    // Scaffold.of(context).sho((context) => widget);
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return Container(
+            padding: MediaQuery.of(context).viewInsets,
+            child: widget,
+          );
+        });
   }
 
   Widget build(BuildContext context) {
@@ -45,12 +54,13 @@ class SignInModal extends StatelessWidget {
                 )),
             Padding(padding: EdgeInsets.symmetric(vertical: 15)),
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (auth.signinFormKey.currentState.validate()) {
-                        print('Valid form, now what lol ?');
-                        print(auth.email.text);
+                        await auth.signInWithEmailAndPassword(
+                            auth.email.text, auth.password.text);
                       }
                     },
                     child: Icon(
