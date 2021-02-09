@@ -7,6 +7,7 @@ import 'package:todolist/src/helpers/validators.dart';
 import 'package:todolist/src/models/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:todolist/src/screens/AuthModals/SignInModal.dart';
+import 'package:todolist/src/screens/AuthModals/SignUpModal.dart';
 
 class Login extends StatelessWidget {
   Widget build(BuildContext context) {
@@ -50,7 +51,8 @@ class Login extends StatelessWidget {
                   ),
                   Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                   TextButton(
-                    onPressed: null,
+                    onPressed: () =>
+                        SignUpModal.showSignUpModal(context, SignUpModal()),
                     child: Text(
                       'Sign up',
                       style: TextStyle(color: ColorsTolary.TolaryBlack),

@@ -7,6 +7,8 @@ class Auth extends ChangeNotifier {
   final signupFormKey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController displayName = TextEditingController();
+  TextEditingController confirmPassword = TextEditingController();
   bool logginIn;
   bool registering;
   bool loginError;
