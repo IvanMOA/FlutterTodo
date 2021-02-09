@@ -30,12 +30,13 @@ class Auth extends ChangeNotifier {
 
   @override
   Future<void> createUserWithEmailAndPassword(
-      String email, String password) async {
+      String email, String password, String displayName) async {
     this.registering = true;
     try {
       var user = (await _firebaseAuth.createUserWithEmailAndPassword(
               email: email, password: password))
           .user;
+      await user.updateProfile(displayName: displayName);
       this.user = user;
       this.registerError = false;
       this.registerSuccesful = true;
