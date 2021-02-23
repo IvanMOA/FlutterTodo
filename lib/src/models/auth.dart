@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 class Auth extends ChangeNotifier {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  FirebaseAuth _firebaseAuth;
   final signinFormKey = GlobalKey<FormState>();
   final signupFormKey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
@@ -18,19 +18,17 @@ class Auth extends ChangeNotifier {
   String registerErrorMessage;
   User user;
 
-  Auth() {
+  Auth.instance({@required FirebaseAuth auth}) {
+    this._firebaseAuth = auth;
     onAuthStateChanged.listen((User usr) {
       this.user = usr;
-      notifyListeners();
     });
   }
 
-  @override
   Stream<User> get onAuthStateChanged => _firebaseAuth.authStateChanges();
 
   String get welcomeMessage => user == null ? 'asd' : 'Welcome, ${user.email}';
 
-  @override
   Future<void> createUserWithEmailAndPassword(
       String email, String password, String displayName) async {
     this.registering = true;
@@ -50,25 +48,29 @@ class Auth extends ChangeNotifier {
     notifyListeners();
   }
 
-  @override
-  Future<void> signInWithEmailAndPassword(String email, String password) async {
+  Future<User> signInWithEmailAndPassword(String email, String password) async {
     this.logginIn = true;
+    notifyListeners();
     try {
       var user = (await _firebaseAuth.signInWithEmailAndPassword(
               email: email, password: password))
           .user;
       this.user = user;
       this.loginError = false;
+      return user;
     } catch (e) {
       this.loginError = true;
       this.loginErrorMessage = "An error occured while trying to sign in";
+      return e;
+    } finally {
+      this.logginIn = false;
+      print('Test');
+      notifyListeners();
     }
-    this.logginIn = false;
-    notifyListeners();
   }
 
-  @override
   Future<void> signOut() {
     _firebaseAuth.signOut();
+    notifyListeners();
   }
 }

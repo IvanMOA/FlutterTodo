@@ -25,7 +25,9 @@ void main() {
           return MultiProvider(providers: [
             ChangeNotifierProvider<TodoListModel>(
                 create: (context) => TodoListModel()),
-            ChangeNotifierProvider<Auth>(create: (context) => Auth()),
+            ChangeNotifierProvider<Auth>(
+                create: (context) =>
+                    Auth.instance(auth: FirebaseAuth.instance)),
           ], child: MyApp());
         }
 
